@@ -162,6 +162,40 @@ cd docker/
 cp .env.example .env
 ```
 
+### Menggunakan sample compose (kredensial)
+
+Jika Anda menyimpan kredensial atau secret di file compose tetapi tidak ingin meng-commit nilai riil, gunakan file sample yang sudah disediakan: `docker/docker-compose.sample.yml`.
+
+- Buat salinan dari sample menjadi file yang dipakai oleh Docker:
+
+```bash
+cd docker/
+cp docker-compose.sample.yml docker-compose.yml
+```
+
+- Edit `docker-compose.yml` dan/atau `docker/.env` untuk mengisi kredensial nyata (DB password, API keys, dsb.).
+
+- Contoh pola yang aman:
+
+    - Letakkan placeholder di `docker/docker-compose.sample.yml` seperti `DB_PASSWORD: "__REPLACE_ME__"`.
+    - Isi nilai nyata di `docker/.env` (versi yang tidak di-commit) atau gunakan Docker secrets untuk production.
+
+- Jangan commit file yang berisi kredensial nyata. Pastikan `.gitignore` mengecualikan `docker/.env` dan `docker-compose.yml` jika berisi secrets.
+
+Contoh cepat untuk menjaga credential out-of-repo:
+
+```bash
+# pastikan .env ada di .gitignore
+echo "docker/.env" >> .gitignore
+
+# copy sample dan edit .env secara lokal
+cp docker/.env.example docker/.env
+# edit docker/.env -> isi DB_PASSWORD, API_KEY, dsb.
+```
+
+Jika ingin menggunakan Docker secrets (lebih aman untuk server): lihat dokumentasi Docker Compose untuk `secrets` dan `env_file`.
+
+
 ### 2. Konfigurasi UID dan GID
 
 Cari tahu UID dan GID Anda dengan perintah:
