@@ -33,7 +33,6 @@ services:
       - default
     restart: always
 
-
   php80:
     build: ../php/docker/php80
     container_name: dev-php80
@@ -43,7 +42,6 @@ services:
     networks:
       - default
     restart: always
-
 
   php82:
     build: ../php/docker/php82
@@ -55,7 +53,6 @@ services:
       - default
     restart: always
 
-
   php83:
     build: ../php/docker/php83
     container_name: dev-php83
@@ -65,7 +62,6 @@ services:
     networks:
       - default
     restart: always
-
 
   mysql:
     container_name: docker-mysql
@@ -84,8 +80,8 @@ services:
     environment:
       TZ: Asia/Jakarta
       MYSQL_USER: mysql
-      MYSQL_PASSWORD: r3tMysql
-      MYSQL_ROOT_PASSWORD: r3tMysql
+      MYSQL_PASSWORD: mysql
+      MYSQL_ROOT_PASSWORD: mysql
     ports:
       - 3307:3306
     volumes:
@@ -101,7 +97,7 @@ services:
       TZ: Asia/Jakarta
       PGTZ: Asia/Jakarta
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: r3tPostgres
+      POSTGRES_PASSWORD: postgres
     ports:
       - 5433:5432
     volumes:
@@ -113,7 +109,7 @@ services:
     container_name: docker-redis
     image: redis:7.2.2
     restart: always
-    command: redis-server --requirepass r3tRedis
+    command: redis-server --requirepass redis
     ports:
       - 6380:6379
     volumes:
@@ -143,7 +139,6 @@ services:
     networks:
       - default
     restart: always
-    
 
   maildev:
     container_name: docker-maildev

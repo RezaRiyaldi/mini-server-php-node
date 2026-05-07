@@ -585,6 +585,20 @@ curl http://api.myapp.local
 
 Untuk development environment dengan HTTPS, ikuti langkah berikut:
 
+#### 1. Update Hosts File
+
+**PENTING:** Sebelum lanjut, pastikan sudah update hosts file agar domain bisa diakses.
+
+Lihat section **[Update Hosts File](#update-hosts-file)** untuk panduan lengkap setup domain lokal di sistem operasi Anda.
+
+Quick reference:
+
+```bash
+# Tambahkan ke /etc/hosts:
+127.0.0.1    myapp.local www.myapp.local
+127.0.0.1    api.myapp.local
+127.0.0.1    admin.myapp.local
+```
 
 #### 2. Generate Self-Signed SSL Certificate
 
