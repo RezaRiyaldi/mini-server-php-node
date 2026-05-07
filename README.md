@@ -3,6 +3,7 @@
 # 🐳 Docker Development Environment
 
 <!-- Badges -->
+
 [![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 [![Docker Compose](https://img.shields.io/badge/Docker%20Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://docs.docker.com/compose/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
@@ -42,6 +43,7 @@
 ## 📖 Overview
 
 Project ini menyediakan complete Docker setup untuk development environment yang mendukung:
+
 - **PHP Versions**: 7.4, 8.0, 8.2, 8.3
 - **Web Server**: Nginx
 - **Databases**: MySQL, PostgreSQL
@@ -68,11 +70,11 @@ Project ini menyediakan complete Docker setup untuk development environment yang
 
 ## 🚀 Release & Version
 
-| Version | Release Date | Status | Notes |
-|---------|-------------|--------|-------|
-| **v2.0.0** | May 2026 | Current | Multi-PHP, Production-Ready |
-| v1.5.0 | April 2026 | Stable | Enhancement Release |
-| v1.0.0 | January 2026 | Deprecated | Initial Release |
+| Version    | Release Date | Status     | Notes                       |
+| ---------- | ------------ | ---------- | --------------------------- |
+| **v2.0.0** | May 2026     | Current    | Multi-PHP, Production-Ready |
+| v1.5.0     | April 2026   | Stable     | Enhancement Release         |
+| v1.0.0     | January 2026 | Deprecated | Initial Release             |
 
 📝 **[See CHANGELOG.md](CHANGELOG.md)** for detailed version history
 
@@ -176,9 +178,8 @@ cp docker-compose.sample.yml docker-compose.yml
 - Edit `docker-compose.yml` dan/atau `docker/.env` untuk mengisi kredensial nyata (DB password, API keys, dsb.).
 
 - Contoh pola yang aman:
-
-    - Letakkan placeholder di `docker/docker-compose.sample.yml` seperti `DB_PASSWORD: "__REPLACE_ME__"`.
-    - Isi nilai nyata di `docker/.env` (versi yang tidak di-commit) atau gunakan Docker secrets untuk production.
+  - Letakkan placeholder di `docker/docker-compose.sample.yml` seperti `DB_PASSWORD: "__REPLACE_ME__"`.
+  - Isi nilai nyata di `docker/.env` (versi yang tidak di-commit) atau gunakan Docker secrets untuk production.
 
 - Jangan commit file yang berisi kredensial nyata. Pastikan `.gitignore` mengecualikan `docker/.env` dan `docker-compose.yml` jika berisi secrets.
 
@@ -194,7 +195,6 @@ cp docker/.env.example docker/.env
 ```
 
 Jika ingin menggunakan Docker secrets (lebih aman untuk server): lihat dokumentasi Docker Compose untuk `secrets` dan `env_file`.
-
 
 ### 2. Konfigurasi UID dan GID
 
@@ -383,6 +383,7 @@ docker-compose ps
 ```
 
 ---
+
 ## 🌐 Update Hosts File
 
 Agar domain lokal dapat diakses dari browser, perlu menambahkan entry ke file hosts sistem Anda.
@@ -429,6 +430,7 @@ sudo vim /etc/hosts
 ```
 
 **Save file:**
+
 - **nano**: `Ctrl + O` → `Enter` → `Ctrl + X`
 - **vim**: `Esc` → `:wq` → `Enter`
 
@@ -474,16 +476,19 @@ ping -c 1 api.myapp.local
 #### Clear DNS Cache (jika diperlukan)
 
 **macOS:**
+
 ```bash
 sudo dscacheutil -flushcache
 ```
 
 **Linux (Ubuntu/Debian):**
+
 ```bash
 sudo systemctl restart systemd-resolved
 ```
 
 **Linux (Fedora/CentOS):**
+
 ```bash
 sudo systemctl restart nscd
 ```
@@ -495,10 +500,12 @@ sudo systemctl restart nscd
 #### Method 1: Using Notepad (Recommended)
 
 **Buka File Explorer:**
+
 1. Navigasi ke: `C:\Windows\System32\drivers\etc\`
 2. Cari file `hosts` (tanpa extension)
 
 **Edit dengan Notepad:**
+
 1. Right-click file `hosts` → **"Open with..."** → **Notepad** (Run as Administrator)
 2. Atau: **Notepad** → **File** → **Open** → `C:\Windows\System32\drivers\etc\hosts`
 
@@ -553,6 +560,7 @@ pause
 #### Verify
 
 **Command Prompt / PowerShell:**
+
 ```powershell
 # Lihat hosts file
 type C:\Windows\System32\drivers\etc\hosts
@@ -596,7 +604,7 @@ curl http://api.myapp.local
 **Domain tidak terdeteksi setelah di-add?**
 
 1. **Restart DNS cache** (lihat section di atas)
-2. **Flush browser cache**: 
+2. **Flush browser cache**:
    - Chrome: `Ctrl + Shift + Delete`
    - Firefox: `Ctrl + Shift + Delete`
 3. **Close dan open browser kembali**
@@ -613,6 +621,7 @@ curl http://api.myapp.local
 3. Check Nginx logs: `docker-compose logs -f nginx`
 
 ---
+
 ## � SSL & Domain Setup
 
 ### Setup Local Domain dengan SSL
@@ -660,31 +669,31 @@ Edit Nginx config file (misal `php/nginx/p80.conf`):
 server {
     listen 80;
     listen 443 ssl http2;
-    
+
     server_name myapp.local www.myapp.local;
-    
+
     # SSL Configuration
     ssl_certificate /etc/nginx/ssl/myapp.local.crt;
     ssl_certificate_key /etc/nginx/ssl/myapp.local.key;
-    
+
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_ciphers HIGH:!aNULL:!MD5;
-    
+
     # Redirect HTTP ke HTTPS
     if ($scheme != "https") {
         return 301 https://$server_name$request_uri;
     }
-    
+
     root /var/www/p80/public;
     index index.php;
-    
+
     location ~ \.php$ {
         fastcgi_pass php80:9000;
         fastcgi_index index.php;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         include fastcgi_params;
     }
-    
+
     location / {
         try_files $uri $uri/ /index.php?$query_string;
     }
@@ -712,17 +721,20 @@ https://api.myapp.local
 Untuk menghilangkan warning:
 
 **macOS:**
+
 ```bash
 sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain php/ssl/myapp.local.crt
 ```
 
 **Linux (Ubuntu):**
+
 ```bash
 sudo cp php/ssl/myapp.local.crt /usr/local/share/ca-certificates/
 sudo update-ca-certificates
 ```
 
 **Windows:**
+
 1. Open "Manage user certificates" (certmgr.msc)
 2. Right-click "Trusted Root Certification Authorities" → "All Tasks" → "Import"
 3. Select `php/ssl/myapp.local.crt`
@@ -774,17 +786,17 @@ CMD ["php-fpm"]
 Tambahkan service baru setelah service `php83`:
 
 ```yaml
-  php84:
-    build: ../php/docker/php84
-    container_name: dev-php84
-    user: "${UID}:${GID}"
-    volumes:
-      - ../php/www:/var/www
-    networks:
-      - default
-    restart: always
-    environment:
-      - PHP_IDE_CONFIG=serverName=php84
+php84:
+  build: ../php/docker/php84
+  container_name: dev-php84
+  user: "${UID}:${GID}"
+  volumes:
+    - ../php/www:/var/www
+  networks:
+    - default
+  restart: always
+  environment:
+    - PHP_IDE_CONFIG=serverName=php84
 ```
 
 #### 3. Buat Nginx Config untuk PHP 8.4
@@ -795,17 +807,17 @@ Buat file `php/nginx/p84.conf`:
 server {
     listen 80;
     server_name p84.localhost;
-    
+
     root /var/www/p84/public;
     index index.php;
-    
+
     location ~ \.php$ {
         fastcgi_pass php84:9000;
         fastcgi_index index.php;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         include fastcgi_params;
     }
-    
+
     location / {
         try_files $uri $uri/ /index.php?$query_string;
     }
@@ -840,13 +852,13 @@ Pastikan nginx bergantung pada php84:
 
 ```yaml
 nginx:
-    depends_on:
-      - php74
-      - php80
-      - php82
-      - php83
-      - php84  # Tambahkan ini
-    restart: always
+  depends_on:
+    - php74
+    - php80
+    - php82
+    - php83
+    - php84 # Tambahkan ini
+  restart: always
 ```
 
 #### 7. Build dan Restart Container
@@ -916,17 +928,17 @@ cat > "php/nginx/p${PHP_PORT}.conf" << EOF
 server {
     listen 80;
     server_name p${PHP_PORT}.localhost;
-    
+
     root /var/www/p${PHP_PORT}/public;
     index index.php;
-    
+
     location ~ \.php$ {
         fastcgi_pass php${PHP_VERSION}:9000;
         fastcgi_index index.php;
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         include fastcgi_params;
     }
-    
+
     location / {
         try_files \$uri \$uri/ /index.php?\$query_string;
     }
@@ -947,6 +959,7 @@ echo "📝 Now edit docker-compose.yml to add the service and rebuild"
 ```
 
 Gunakan:
+
 ```bash
 chmod +x add-php-service.sh
 ./add-php-service.sh 8.5 85
@@ -1091,6 +1104,7 @@ A: Ya, edit `docker/docker-compose.yml` dan tambahkan service database yang diin
 Kontribusi sangat diterima! Berikut cara berkontribusi:
 
 ### Development Setup
+
 1. Fork repository ini
 2. Clone ke local machine
 3. Create feature branch: `git checkout -b feature/amazing-feature`
@@ -1099,6 +1113,7 @@ Kontribusi sangat diterima! Berikut cara berkontribusi:
 6. Open Pull Request
 
 ### Guidelines
+
 - ✅ Follow existing code style
 - ✅ Update documentation
 - ✅ Test perubahan sebelum submit PR
@@ -1115,6 +1130,7 @@ Project ini dilisensikan di bawah **MIT License** - lihat [LICENSE](LICENSE) fil
 ## 🙏 Acknowledgments
 
 Terima kasih kepada:
+
 - [Docker](https://www.docker.com/) - Container platform
 - [Docker Compose](https://docs.docker.com/compose/) - Orchestration tool
 - [PHP](https://www.php.net/) - Programming language
@@ -1124,11 +1140,11 @@ Terima kasih kepada:
 
 ## 🔗 Related Resources
 
-| Resource | Link |
-|----------|------|
-| **Issues** | [Issues](https://github.com) |
+| Resource        | Link                              |
+| --------------- | --------------------------------- |
+| **Issues**      | [Issues](https://github.com)      |
 | **Discussions** | [Discussions](https://github.com) |
-| **Releases** | [Releases](https://github.com) |
+| **Releases**    | [Releases](https://github.com)    |
 
 ---
 
@@ -1143,7 +1159,7 @@ Project ini adalah repository pribadi untuk development dan testing environment.
 <img src="https://img.shields.io/badge/Made%20with%20%F0%9F%92%A7%20by-Personal%20Project-blue?style=flat-square" alt="Made with love"/>
 
 **Docker Development Environment** © 2026  
-*Personal Development Setup*
+_Personal Development Setup_
 
 ---
 
@@ -1157,4 +1173,4 @@ Project ini adalah repository pribadi untuk development dan testing environment.
 
 <!-- END WATERMARK -->
 
-</div>  
+</div>
