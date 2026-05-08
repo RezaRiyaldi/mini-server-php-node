@@ -43,6 +43,16 @@ services:
       - default
     restart: always
 
+  php81:
+    build: ../php/docker/php81
+    container_name: dev-php81
+    user: "${UID}:${GID}"
+    volumes:
+      - ../php/www:/var/www
+    networks:
+      - default
+    restart: always
+
   php82:
     build: ../php/docker/php82
     container_name: dev-php82
@@ -56,6 +66,26 @@ services:
   php83:
     build: ../php/docker/php83
     container_name: dev-php83
+    user: "${UID}:${GID}"
+    volumes:
+      - ../php/www:/var/www
+    networks:
+      - default
+    restart: always
+
+  php84:
+    build: ../php/docker/php84
+    container_name: dev-php84
+    user: "${UID}:${GID}"
+    volumes:
+      - ../php/www:/var/www
+    networks:
+      - default
+    restart: always
+
+  php85:
+    build: ../php/docker/php85
+    container_name: dev-php85
     user: "${UID}:${GID}"
     volumes:
       - ../php/www:/var/www
