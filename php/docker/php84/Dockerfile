@@ -10,6 +10,10 @@ RUN apk add --no-cache \
     libjpeg-turbo-dev \
     libzip-dev \
     icu-dev \
+    postgresql-dev \
+    autoconf \
+    g++ \
+    make \
     zip \
     unzip
 
@@ -18,22 +22,22 @@ RUN docker-php-ext-configure gd \
     --with-jpeg
 
 RUN docker-php-ext-install \
-    # pdo \
     intl \
-    mysqli \
     pdo_mysql \
+    pdo_pgsql \
+    mysqli \
     bcmath \
-    # ctype \
-    # fileinfo \
-    # json \
     mbstring \
     gd \
     zip \
     exif \
-    # tokenizer \
-    xml
+    xml \
+    pcntl \
+    opcache
 
-# install composer (best way)
+RUN pecl install redis \
+    && docker-php-ext-enable redis opcache
+
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www

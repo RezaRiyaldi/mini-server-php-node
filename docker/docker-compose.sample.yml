@@ -93,6 +93,34 @@ services:
       - default
     restart: always
 
+  queue-worker:
+    build: ../php/docker/php84
+    container_name: dev-queue-worker
+    user: "${UID}:${GID}"
+    command: sh -c "cd /var/www/p84/riyerp && php artisan queue:work redis --sleep=3 --tries=3 --max-time=3600 --queue=high,default,low"
+    volumes:
+      - ../php/www:/var/www
+    networks:
+      - default
+    restart: always
+    depends_on:
+      - redis
+      - postgres
+
+  scheduler:
+    build: ../php/docker/php84
+    container_name: dev-scheduler
+    user: "${UID}:${GID}"
+    command: sh -c "while true; do cd /var/www/p84/riyerp && php artisan schedule:run --verbose --no-interaction & sleep 60; done"
+    volumes:
+      - ../php/www:/var/www
+    networks:
+      - default
+    restart: always
+    depends_on:
+      - postgres
+      - redis
+
   mysql:
     container_name: docker-mysql
     image: mysql:8.0.34
@@ -128,6 +156,22 @@ services:
       PGTZ: Asia/Jakarta
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+    command:
+      - "postgres"
+      - "-c"
+      - "max_connections=200"
+      - "-c"
+      - "shared_buffers=256MB"
+      - "-c"
+      - "effective_cache_size=1GB"
+      - "-c"
+      - "work_mem=16MB"
+      - "-c"
+      - "maintenance_work_mem=128MB"
+      - "-c"
+      - "timezone=Asia/Jakarta"
+      - "-c"
+      - "log_timezone=Asia/Jakarta"
     ports:
       - 5433:5432
     volumes:
