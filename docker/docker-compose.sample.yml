@@ -16,12 +16,25 @@ services:
       - ../php/ssl:/etc/nginx/ssl
     restart: always
     depends_on:
+      - php56
       - php74
       - php80
       - php82
       - php83
+      - php84
+      # - php85
     networks:
       - default
+
+  php56:
+    image: byjg/php:5.6-fpm
+    container_name: dev-php56
+    user: "${UID}:${GID}"
+    volumes:
+      - ../php/www:/var/www
+    networks:
+      - default
+    restart: always
 
   php74:
     build: ../php/docker/php74
@@ -83,15 +96,15 @@ services:
       - default
     restart: always
 
-  php85:
-    build: ../php/docker/php85
-    container_name: dev-php85
-    user: "${UID}:${GID}"
-    volumes:
-      - ../php/www:/var/www
-    networks:
-      - default
-    restart: always
+  # php85:
+  #   build: ../php/docker/php85
+  #   container_name: dev-php85
+  #   user: "${UID}:${GID}"
+  #   volumes:
+  #     - ../php/www:/var/www
+  #   networks:
+  #     - default
+  #   restart: always
 
   queue-worker:
     build: ../php/docker/php84
